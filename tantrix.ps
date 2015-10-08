@@ -1,0 +1,415 @@
+%!PS-Adobe-3.0
+%%Title: (Tantrix tiles in PostScript)
+%%LanguageLevel: 2
+%%Creator: Matthew Newton
+%%DocumentMedia: A4 595.27559 841.88976 0 ( ) ( )
+%%Orientation: Portrait
+%%Pages: 2
+%%EndComments
+
+% Copyright (c) 2010-2015 Matthew Newton
+% 
+% Permission is hereby granted, free of charge, to any person
+% obtaining a copy of this software and associated documentation
+% files (the "Software"), to deal in the Software without
+% restriction, including without limitation the rights to use,
+% copy, modify, merge, publish, distribute, sublicense, and/or
+% sell copies of the Software, and to permit persons to whom the
+% Software is furnished to do so, subject to the following
+% conditions:
+% 
+% The above copyright notice and this permission notice shall be
+% included in all copies or substantial portions of the Software.
+% 
+% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+% EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+% OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+% NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+% HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+% WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+% FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+% OTHER DEALINGS IN THE SOFTWARE.
+
+%%BeginProlog
+%%BeginResource: Tantrix
+
+
+% define all the tile definitions and put them in tiledict
+0 dict dup /tiledict exch def begin
+
+/ra 30 def
+
+/bd { bind def } bind def
+/m { moveto } bd
+/l { lineto } bd
+/np { newpath } bd
+/st { stroke } bd
+/cp { closepath } bd
+/gs { gsave } bd
+/gr { grestore } bd
+/fi { fill } bd
+/co { setrgbcolor } bd
+
+/ry ra 30 sin mul def
+/rx ra 30 cos mul def
+/lw_div 2.2 def
+/lb_div 1.4 def
+
+/tile_bg_col { 0 setgray } bd
+/tile_edge_col { 0.9 setgray } bd
+%/tile_bg_col { 1 setgray } bd
+%/tile_edge_col { 0.1 setgray } bd
+
+/R { 1   0   0   co } bd
+/G { 0   0.6 0   co } bd
+/Y { 1   1   0   co } bd
+/B { 0   0   0.8 co } bd
+/W { 1   1   1   co } bd
+
+/tile_path {
+  x rx add  y ry add  m
+  x         y ra add  l
+  x rx sub  y ry add  l
+  x rx sub  y ry sub  l
+  x         y ra sub  l
+  x rx add  y ry sub  l
+  x rx add  y ry add  l
+} def
+
+/tile_rotate {
+  2 copy translate
+  3 2 roll -60 mul rotate
+  exch neg exch neg translate
+} bd
+
+% small circle
+/SC {
+  2 dict begin
+  /col exch def
+  /rot exch def
+  gs
+  rot x y tile_rotate
+  ry lw_div div setlinewidth
+  col cvx exec
+  x rx add y ry add ry 150 270 arc
+  st
+  gr
+  end
+} def
+
+% large circle
+/LC {
+  2 dict begin
+  /col exch def
+  /rot exch def
+  gs
+  rot x y tile_rotate
+  np
+  ry lb_div div setlinewidth
+  tile_bg_col
+  x rx 2 mul add y ry 3 mul 150 210 arc
+  st
+  np
+  ry lw_div div setlinewidth
+  col cvx exec
+  x rx 2 mul add y ry 3 mul 150 210 arc
+  st
+  gr
+  end
+} def
+
+% straight line
+/SL {
+  2 dict begin
+  /col exch def
+  /rot exch def
+  gs
+  rot x y tile_rotate
+  np
+  ry lb_div div setlinewidth
+  tile_bg_col
+  x rx 2 div add y ry add ra ry sub 2 div add m
+  x rx 2 div sub y ry sub ra ry sub 2 div sub l
+  st
+  np
+  ry lw_div div setlinewidth
+  col cvx exec
+  x rx 2 div add y ry add ra ry sub 2 div add m
+  x rx 2 div sub y ry sub ra ry sub 2 div sub l
+  st
+  gr
+  end
+} def
+
+% newline
+/n {
+  exch pop left exch         % x
+  tiledict /ry get 3 mul sub % y
+} def
+
+% half space
+/s { exch tiledict /rx get add exch } bd
+
+
+% define all the different tiles
+/Tiles [
+[ ] 
+[ 4 /B /LC  5 /R /LC  2 /Y /SC   1 /Y ] %1
+[ 5 /Y /SC  2 /R /SC  1 /B /SL   2 /Y ] %2
+[ 0 /Y /SC  2 /R /SC  4 /B /SC   3 /Y ] %3
+[ 0 /Y /LC  1 /B /SL  3 /R /LC   4 /R ] %4
+[ 1 /R /SL  2 /B /SC  5 /Y /SC   5 /R ] %5
+[ 0 /R /LC  1 /Y /SL  3 /B /LC   6 /B ] %6
+[ 2 /B /SC  4 /Y /LC  5 /R /LC   7 /B ] %7
+[ 2 /B /SC  4 /R /LC  5 /Y /LC   8 /B ] %8
+[ 0 /Y /LC  1 /R /SL  3 /B /LC   9 /Y ] %9
+[ 1 /R /LC  2 /B /LC  5 /Y /SC  10 /R ] %10
+[ 1 /B /LC  2 /Y /LC  5 /R /SC  11 /R ] %11
+[ 1 /Y /LC  2 /B /LC  5 /R /SC  12 /Y ] %12
+[ 5 /B /SC  2 /R /SC  1 /Y /SL  13 /B ] %13
+[ 1 /R /SC  3 /Y /SC  5 /B /SC  14 /B ] %14
+[ 5 /Y /SC  2 /G /SC  1 /R /SL  15 /R ] %15
+[ 5 /G /SC  2 /R /SC  1 /Y /SL  16 /R ] %16
+[ 1 /G /LC  2 /R /LC  5 /Y /SC  17 /Y ] %17
+[ 1 /R /LC  2 /G /LC  5 /Y /SC  18 /R ] %18
+[ 1 /G /LC  2 /Y /LC  5 /R /SC  19 /R ] %19
+[ 1 /Y /LC  2 /G /LC  5 /R /SC  20 /Y ] %20
+[ 1 /G /SC  3 /R /SC  5 /Y /SC  21 /Y ] %21
+[ 5 /Y /SC  2 /R /SC  1 /G /SL  22 /Y ] %22
+[ 1 /G /SC  3 /Y /SC  5 /R /SC  23 /Y ] %23
+[ 1 /B /SL  2 /G /SC  5 /R /SC  24 /R ] %24
+[ 1 /R /SC  3 /B /SC  5 /G /SC  25 /R ] %25
+[ 1 /G /SL  2 /B /SC  5 /R /SC  26 /R ] %26
+[ 1 /B /LC  2 /G /LC  5 /R /SC  27 /R ] %27
+[ 1 /B /SC  3 /R /SC  5 /G /SC  28 /R ] %28
+[ 1 /G /LC  2 /B /LC  5 /R /SC  29 /R ] %29
+[ 1 /R /SL  2 /B /SC  5 /G /SC  30 /R ] %30
+[ 1 /R /LC  2 /Y /LC  5 /G /SC  31 /Y ] %31
+[ 3 /R /LC  1 /G /SL  0 /Y /LC  32 /G ] %32
+[ 1 /Y /LC  2 /R /LC  5 /G /SC  33 /G ] %33
+[ 3 /G /LC  1 /R /SL  0 /Y /LC  34 /G ] %34
+[ 3 /G /LC  1 /Y /SL  0 /R /LC  35 /G ] %35
+[ 1 /R /LC  2 /B /LC  5 /G /SC  36 /G ] %36
+[ 1 /G /LC  2 /R /LC  5 /B /SC  37 /G ] %37
+[ 1 /R /LC  2 /G /LC  5 /B /SC  38 /G ] %38
+[ 3 /R /LC  1 /G /SL  0 /B /LC  39 /B ] %39
+[ 3 /R /LC  1 /B /SL  0 /G /LC  40 /B ] %40
+[ 1 /B /LC  2 /R /LC  5 /G /SC  41 /B ] %41
+[ 3 /B /LC  1 /R /SL  0 /G /LC  42 /B ] %42
+[ 1 /G /SC  3 /B /SC  5 /Y /SC  43 /B ] %43
+[ 3 /B /LC  1 /Y /SL  0 /G /LC  44 /Y ] %44
+[ 1 /B /SC  3 /G /SC  5 /Y /SC  45 /G ] %45
+[ 1 /B /LC  2 /Y /LC  5 /G /SC  46 /G ] %46
+[ 1 /Y /SL  2 /B /SC  5 /G /SC  47 /G ] %47
+[ 1 /B /SL  2 /Y /SC  5 /G /SC  48 /W ] %48
+[ 1 /G /SL  2 /Y /SC  5 /B /SC  49 /W ] %49
+[ 3 /Y /LC  1 /B /SL  0 /G /LC  50 /W ] %50
+[ 3 /B /LC  1 /G /SL  0 /Y /LC  51 /W ] %51
+[ 1 /Y /LC  2 /B /LC  5 /G /SC  52 /W ] %52
+[ 1 /G /LC  2 /B /LC  5 /Y /SC  53 /W ] %53
+[ 1 /B /LC  2 /G /LC  5 /Y /SC  54 /W ] %54
+[ 1 /G /LC  2 /Y /LC  5 /B /SC  55 /W ] %55
+[ 1 /Y /LC  2 /G /LC  5 /B /SC  56 /W ] %56
+] def
+
+
+% draw an individual tile
+/Tile {
+  0 begin
+  /rot exch def
+  /t exch def
+  /y exch def
+  /x exch def
+
+  /tiledef Tiles t get def
+
+  gs
+
+  tile_bg_col
+  np tile_path cp fi
+
+  rot x y tile_rotate
+  0 3 6 {
+    tiledef
+    exch 3 getinterval
+    cvx exec cvx exec
+  } for
+
+  ra 20 div setlinewidth
+  2 setlinejoin
+  tile_edge_col
+  np tile_path st
+
+  np
+  Tiles t get 10 get cvx exec
+  ra 0.8 mul dup 30 cos mul x add
+  exch 30 sin mul y add
+  2 copy m
+  ra 0.08 mul 0 360 arc cp fi
+
+  gr
+
+  x rx 2 mul add   y
+
+%  /Tiles load t /TileUsed put
+  end
+} def
+/Tile load 0 1 dict put
+
+
+% different rotations of a tile
+/a { tiledict begin 0 Tile end } bd
+/b { tiledict begin 1 Tile end } bd
+/c { tiledict begin 2 Tile end } bd
+/d { tiledict begin 3 Tile end } bd
+/e { tiledict begin 4 Tile end } bd
+/f { tiledict begin 5 Tile end } bd
+
+end
+
+% copy API functions from tiledict into currentdict
+/tiles {
+  currentdict /a tiledict /a get put
+  currentdict /b tiledict /b get put
+  currentdict /c tiledict /c get put
+  currentdict /d tiledict /d get put
+  currentdict /e tiledict /e get put
+  currentdict /f tiledict /f get put
+  currentdict /n tiledict /n get put
+  currentdict /s tiledict /s get put
+} def
+%%EndResource
+%%BeginResource: TantrixSolutions
+
+% solution 0 is just all the tiles in order
+% the rest of the solutions need completing here...
+
+/Solutions [
+{ %0
+	 1 a  2 a  3 a  4 a  5 a  6 a  7 a n s
+	 8 a  9 a 10 a 11 a 12 a 13 a 14 a n
+	15 a 16 a 17 a 18 a 19 a 20 a 21 a n s
+	22 a 23 a 24 a 25 a 26 a 27 a 28 a n
+	29 a 30 a 31 a 32 a 33 a 34 a 35 a n s
+	36 a 37 a 38 a 39 a 40 a 41 a 42 a n
+	43 a 44 a 45 a 46 a 47 a 48 a 49 a n s
+	50 a 51 a 52 a 53 a 54 a 55 a 56 a n
+} %0
+{ } %1
+{ } %2
+{ s  1 a  n  2 b  3 e } %3
+{ s  3 a  n  1 b  4 a  n  s  2 d } %4
+{ } %5
+{ } %6
+{ } %7
+{ } %8
+{ } %9
+{ } %10
+{ } %11
+{ } %12
+{ } %13
+{ } %14
+{ } %15
+{ } %16
+{ } %17
+{ } %18
+{ } %19
+{ %20
+	s s s s s s s s s 18 d n
+	s s 1 a 3 b 13 a 7 a 12 e 2 e n
+	s 16 f 8 a 10 f 9 b 6 a 11 c n
+	14 d 4 c 5 d 20 f n
+	s s s 17 a 19 d 15 f n
+} %20
+{ %21
+	s s s s s s s s s 21 d n
+	s s 5 d 2 c 13 a 8 f 11 d 3 d n
+	s 16 f 4 f 10 f 12 a 9 c 6 f n
+	14 d 7 e 1 a 20 f s s 18 a n
+	s s s 17 a 19 d 15 f n
+} %21
+{ } %22
+{ } %23
+{ } %24
+{ } %25
+{ } %26
+{ } %27
+{ } %28
+{ } %29
+{ } %30
+{ 16 a }
+] def
+%%EndResource
+%%EndProlog
+
+
+%%Page: 1 1
+%%BeginPageSetup
+/pagelevel save def
+%%EndPageSetup
+
+
+% left margin, or "where does 'n' jump back to"
+/left 100 def
+% load tile definitions into current dictionary
+tiles
+% push X Y onto the stack
+left 750
+
+% call solution 0 (display all tiles)
+Solutions 0 get exec n
+
+% draw solution 4
+Solutions 4 get exec n
+
+% reset X Y
+/left 180 def
+pop pop left 300
+
+
+% draw solution 20
+Solutions 20 get exec n
+
+% clear X Y off the stack
+pop pop
+
+%%PageTrailer
+pagelevel restore
+showpage
+
+
+%%Page: 2 2
+%%BeginPageSetup
+/pagelevel save def
+%%EndPageSetup
+
+% set up current dictionary, left margin and X Y
+/left 100 def
+tiles
+left 700
+
+% draw the tantrix triangle
+% "s" means space forwards
+% <n> is tile n, followed by
+% a,b,c,d,e,f, which sets the rotation
+% "n" advances to the next line
+
+s s s s s s s s 6 d n                           % 1
+s s s s s s s 4 b 12 b n                        % 2
+s s s s s s 47 c 49 a 33 e n                    % 3
+s s s s s 32 a 45 b 43 f 17 b n                 % 4
+s s s s 15 c 1 c 37 a 29 b 22 b n               % 5
+s s s 31 f 10 f 55 f 7 e 27 b 35 c n            % 6
+s s 19 c 25 d 8 b 38 d 56 c 3 a 5 e n           % 7
+s 53 f 30 b 28 f 46 d 52 d 14 f 13 c 40 a n     % 8
+51 b 50 f 26 a 34 b 16 a 20 d 18 a 36 d 42 f n  % 9
+
+% remove X Y off the stack
+pop pop
+
+
+%%PageTrailer
+pagelevel restore
+showpage
+
+%%EOF
